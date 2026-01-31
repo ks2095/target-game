@@ -6,10 +6,11 @@ const nameInputsContainer = document.getElementById('name-inputs');
 const resultOverlay = document.getElementById('result-overlay');
 const resultStatus = document.getElementById('result-status');
 const resultShooter = document.getElementById('result-shooter');
+const uiLayer = document.getElementById('ui-layer');
+const fireBtn = document.getElementById('fire-btn'); // New Fire Button
 const retryBtn = document.getElementById('retry-btn');
 const arrowSpeedMultiplierInput = document.getElementById('arrow-speed-multiplier');
 const winLabel = document.querySelector('.win-label');
-const uiLayer = document.getElementById('ui-layer');
 const betPlayerInputsContainer = document.getElementById('bet-player-inputs');
 
 const soundTension = document.getElementById('sound-tension');
@@ -1419,9 +1420,28 @@ function release() {
 }
 
 // Input Handlers
-canvas.addEventListener('mousedown', startPull);
+// Input Handlers - MODIFIED: Use specific button for starting pull
+const fireButton = document.getElementById('fire-btn');
+
+if (fireButton) {
+    fireButton.addEventListener('mousedown', (e) => {
+        e.preventDefault(); // Prevent text selection
+        startPull(e);
+    });
+    fireButton.addEventListener('touchstart', (e) => {
+        e.preventDefault(); // Prevent scroll/zoom on button
+        startPull(e);
+    });
+} else {
+    // Fallback for older HTML (though we updated it)
+    canvas.addEventListener('mousedown', startPull);
+    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startPull(); });
+}
+
+// Global Move/Up handlers to track drag once started
 window.addEventListener('mouseup', release);
-canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startPull(); });
+window.addEventListener('touchend', release);
+
 window.addEventListener('touchend', release);
 
 window.addEventListener('keydown', (e) => {

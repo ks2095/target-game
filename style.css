@@ -213,8 +213,10 @@ header {
     width: 90%;
     max-width: 800px;
     position: absolute;
-    bottom: 0;
-    left: 50%;
+    bottom: 30px;
+    /* Moved up */
+    left: 54%;
+    /* Moved right further */
     transform: translateX(-50%);
     max-height: 40vh;
     overflow-y: auto;
@@ -273,6 +275,18 @@ header {
     font-size: 0.9rem;
     font-weight: 700;
     outline: none;
+}
+
+/* Force Spin Buttons to be Visible */
+#player-count::-webkit-outer-spin-button,
+#player-count::-webkit-inner-spin-button,
+#bet-count::-webkit-outer-spin-button,
+#bet-count::-webkit-inner-spin-button {
+    -webkit-appearance: inner-spin-button !important;
+    opacity: 1 !important;
+    display: block !important;
+    margin-left: 5px;
+    /* Slight gap */
 }
 
 
@@ -1023,4 +1037,80 @@ input[type="range"]::-webkit-slider-thumb:hover {
     border-color: var(--accent-red);
     color: var(--accent-red);
     background: rgba(255, 62, 62, 0.1);
+}
+
+/* Fire Control Button */
+#fire-control-area {
+    position: absolute;
+    bottom: 140px;
+    /* Moved up further */
+    right: 40px;
+    /* Moved right further */
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    pointer-events: auto;
+    /* Ensure it catches clicks */
+}
+
+#fire-btn {
+    width: 100px;
+    /* Slightly wider for rectangle */
+    height: 70px;
+    /* Rectangular shape */
+    border-radius: 20px;
+    /* Smooth corners */
+    background: linear-gradient(135deg, #8b4513, #5a2d0c);
+    /* Bow Color */
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.2s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+    /* Prevent browser handling gestures here */
+}
+
+#fire-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6) inset;
+    background: linear-gradient(135deg, #5a2d0c, #8b4513);
+}
+
+.fire-text {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: white;
+    letter-spacing: 1px;
+}
+
+.fire-arrow {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: -2px;
+}
+
+.fire-hint {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+/* Adjust layout for mobile if necessary */
+@media (max-width: 768px) {
+    #fire-control-area {
+        bottom: 30px;
+        right: 30px;
+    }
 }
