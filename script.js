@@ -191,62 +191,14 @@ diffArrowSpeedInput.addEventListener('input', () => {
 });
 
 function resize() {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-
-    // Responsive Target Positioning
-    if (width < 600) {
-        // Mobile Portrait
-        target.x = width * 0.5;
-        target.y = height * 0.3;
-        target.radius = width * 0.35;
-    } else if (height < 600) {
-        // Mobile Landscape
-        target.x = width * 0.2; // Keep it on the left
-        target.y = height * 0.5; // Center vertically
-        target.radius = height * 0.35; // Scale based on height
-    } else {
-        // Desktop
-        target.x = width * 0.15;
-        target.y = height * 0.4;
-        target.radius = 200;
-    }
+    width = canvas.width = canvas.offsetWidth;
+    height = canvas.height = canvas.offsetHeight;
+    target.x = width * 0.15; // Moved further to the left (was 25%)
+    target.y = height * 0.4; // Slightly above center to avoid bottom panel
 }
 
 window.addEventListener('resize', resize);
 resize();
-
-// --- Fullscreen Toggle ---
-const fullscreenBtn = document.getElementById('fullscreen-btn');
-if (fullscreenBtn) {
-    fullscreenBtn.addEventListener('click', toggleFullscreen);
-}
-
-function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch((err) => {
-            console.error(`Error attempting to enable fullscreen: ${err.message}`);
-        });
-    } else {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        }
-    }
-}
-
-document.addEventListener('fullscreenchange', () => {
-    // Re-run resize to adjust to new dimensions
-    setTimeout(resize, 100);
-
-    // Update button icon/text if needed (optional)
-    if (document.fullscreenElement) {
-        fullscreenBtn.innerHTML = 'EXIT FULLSCREEN';
-        fullscreenBtn.classList.add('active');
-    } else {
-        fullscreenBtn.innerHTML = 'FULLSCREEN';
-        fullscreenBtn.classList.remove('active');
-    }
-});
 
 // --- Name Management ---
 
