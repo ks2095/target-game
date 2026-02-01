@@ -1,0 +1,21 @@
+{
+  "name": "Target Game",
+  "short_name": "TargetGame",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#00ff88",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "screaming_chicken_arrow_v2.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "screaming_chicken_arrow_v2.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
