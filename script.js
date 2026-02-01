@@ -14,6 +14,20 @@ const winLabel = document.querySelector('.win-label');
 const betPlayerInputsContainer = document.getElementById('bet-player-inputs');
 
 const soundTension = document.getElementById('sound-tension');
+const fullscreenBtn = document.getElementById('fullscreen-btn');
+
+fullscreenBtn.addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+            console.error(`Error attempting to enable fullscreen: ${err.message}`);
+        });
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
+});
+
 const soundAward = document.getElementById('sound-award');
 const soundPull = document.getElementById('sound-pull');
 const soundShoot = document.getElementById('sound-shoot');

@@ -106,6 +106,31 @@ header {
     filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.4));
 }
 
+.icon-btn {
+    background: transparent;
+    border: none;
+    color: var(--primary-glow);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+    /* Spacing from title */
+}
+
+.icon-btn:hover {
+    background: rgba(0, 255, 136, 0.1);
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+    transform: scale(1.1);
+}
+
+.icon-btn svg {
+    filter: drop-shadow(0 0 5px rgba(0, 255, 136, 0.5));
+}
+
 #instruction {
     position: absolute;
     top: 2rem;
@@ -748,23 +773,120 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 /* Mobile Adjustments */
-@media (max-width: 600px) {
-    header {
-        flex-direction: column;
+@media (max-width: 768px) {
+    body {
+        /* Prevents scrolling on mobile games */
+        overscroll-behavior: none;
+        touch-action: none;
+    }
+
+    .header-left {
+        top: 1rem;
+        left: 1rem;
+        flex-direction: row;
+        /* Keep title and button side-by-side */
+        align-items: center;
         gap: 1rem;
     }
 
-    .glass-panel {
-        width: 100%;
-        max-height: 25vh;
+    .glow-text {
+        font-size: 1.1rem;
     }
 
-    .glow-text {
+    #instruction {
+        font-size: 1rem;
+        top: 4rem;
+        /* Move below header */
+        width: 100%;
+        text-align: center;
+    }
+
+    #game-wrapper {
+        /* Fix for mobile browser height issues */
+        height: 100vh;
+        height: 100dvh;
+        /* Use dynamic viewport height if supported */
+    }
+
+    /* Adjust Glass Panel for Mobile */
+    .glass-panel {
+        width: 95%;
+        left: 50%;
+        bottom: 20px;
+        transform: translateX(-50%);
+        padding: 1rem;
+    }
+
+    /* Stack setup rows more aggressively */
+    .setup-row {
+        gap: 1rem;
+        justify-content: space-between;
+    }
+
+    .input-group {
+        flex: 1;
+        /* Allow growing */
+        min-width: 45%;
+        /* almost half width */
+        justify-content: center;
+    }
+
+    .input-group label {
+        font-size: 0.65rem;
+    }
+
+    /* Make toggles smaller */
+    .toggle-container {
+        font-size: 0.6rem;
+        gap: 0.4rem;
+    }
+
+    .switch {
+        width: 30px;
+        height: 16px;
+    }
+
+    .slider:before {
+        height: 12px;
+        width: 12px;
+        left: 1px;
+        bottom: 1px;
+    }
+
+    input:checked+.slider:before {
+        transform: translateX(14px);
+    }
+
+    /* Result Overlay Text */
+    #result-status {
+        font-size: 3rem;
+    }
+
+    #result-shooter {
         font-size: 1.2rem;
     }
 
-    #result-status {
-        font-size: 2.5rem;
+    /* Adjust Fire Button */
+    #fire-control-area {
+        right: 20px;
+        bottom: 120px;
+        /* Check if this collides with panel */
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* Smaller phones */
+    .glass-panel {
+        bottom: 15px;
+        max-height: 35vh;
+    }
+
+    #fire-control-area {
+        bottom: 25%;
+        /* Move up to avoid bottom panel overlap */
+        right: 15px;
+        transform: scale(0.9);
     }
 }
 
