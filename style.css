@@ -57,31 +57,6 @@ body {
     box-shadow: 0 0 15px var(--primary-glow);
 }
 
-.fullscreen-btn {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    z-index: 1000;
-    padding: 0.8rem;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.fullscreen-btn:hover {
-    background: var(--primary-glow);
-    color: black;
-    transform: scale(1.1);
-    box-shadow: 0 0 15px var(--primary-glow);
-}
-
 #game-wrapper {
     position: relative;
     width: 100%;
