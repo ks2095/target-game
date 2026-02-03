@@ -200,6 +200,38 @@ header {
     }
 }
 
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.help-link {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: all 0.3s;
+    z-index: 1000;
+}
+
+.help-link:hover {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px var(--primary-glow);
+    background: rgba(0, 255, 136, 0.1);
+}
+
 /* Setup Panel Styles - Moved to Bottom Center */
 .glass-panel {
     background: transparent;
@@ -1386,10 +1418,4 @@ input[type="range"]::-webkit-slider-thumb:hover {
     border-color: #555 !important;
     box-shadow: none !important;
     animation: none !important;
-}
-
-100% {
-    box-shadow: 0 0 10px var(--primary-glow);
-    transform: scale(1);
-}
 }

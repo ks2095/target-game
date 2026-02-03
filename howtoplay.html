@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Play - Target Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            overflow-y: auto;
+            padding-bottom: 50px;
+            /* Reset global styles that center content */
+            display: block;
+            height: auto;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-top: 50px;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+        }
+
+        .mode-title {
+            color: var(--secondary-glow);
+            font-size: 1.4rem;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .description-text {
+            color: #ccc;
+            line-height: 2.0;
+            /* Increased from 1.8 */
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            overflow: visible;
+            /* Ensure no clipping */
+        }
+
+        .option-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .option-header {
+            color: var(--highlight-color);
+            font-weight: bold;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .home-btn {
+            display: inline-block;
+            margin-bottom: 30px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .home-btn:hover {
+            background: var(--primary-glow);
+            color: black;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-top: 2px;
+            /* Add slight padding for ascenders */
+            overflow: visible;
+        }
+
+        li::before {
+            content: "•";
+            color: var(--primary-glow);
+            font-weight: bold;
+            display: inline-block;
+            width: 1.5em;
+            margin-left: -1em;
+            margin-right: 0.5em;
+            text-align: left;
+            line-height: 1;
+            /* Reset line-height for bullet */
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="index.html" class="home-btn">&larr; Back to Game</a>
+
+        <header>
+            <h1 class="glow-text" style="text-align: center; margin-bottom: 20px;">TARGET GAME – Game Guide</h1>
+            <p class="description-text" style="text-align: center; font-size: 1rem;">
+                Target Game is a casual web archery game combining reaction speed, strategy, and random elements.<br>
+                Enjoy various modes to test your skills or luck!
+            </p>
+        </header>
+
+        <section>
+            <h2 class="section-title">🧑🤝🧑 1. PLAYERS MODE</h2>
+            <p class="description-text">
+                A classic mode focusing on player skill and reaction speed.
+            </p>
+
+            <h3 class="mode-title">▶ BASIC MODE</h3>
+            <div class="description-text">
+                <ul>
+                    <li>Targets are evenly distributed (2 per player).</li>
+                    <li><strong>TARGET SPEED</strong> and <strong>ARROW SPEED</strong> can be mutually agreed upon and
+                        adjusted by players before starting.</li>
+                    <li>Compete purely on skill and concentration under equal conditions.</li>
+                </ul>
+            </div>
+
+            <h3 class="mode-title">▶ FUN MODE</h3>
+            <div class="description-text">
+                <ul>
+                    <li>Supports 3 to 7 players.</li>
+                    <li>Targets are distributed randomly.</li>
+                    <li>The player assigned the <strong>widest target area</strong> gains special authority:
+                        <ul style="margin-top: 10px; margin-left: 20px;">
+                            <li><strong>TARGET SPEED:</strong> Can restrict speed to 1% ~ 6%.</li>
+                            <li><strong>ARROW SPEED:</strong> Can adjust freely.</li>
+                        </ul>
+                    </li>
+                    <li>Conditions change every round, offering unpredictable fun.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">🎁 2. BET / PRIZE MODE</h2>
+            <p class="description-text">
+                Perfect for raffles, penalties, or deciding turns.
+            </p>
+
+            <h3 class="mode-title">▶ BASIC MODE</h3>
+            <div class="description-text">
+                <ul>
+                    <li>Targets are evenly distributed (2 per item).</li>
+                    <li>The number of players is automatically set based on the number of items input.</li>
+                    <li>Enter the names of items/penalties and players.</li>
+                    <li>Players shoot in the order entered.</li>
+                    <li><strong>When a player shoots:</strong> One target and one player are removed.</li>
+                    <li>Maximum of 10 items can be set.</li>
+                </ul>
+            </div>
+
+            <h3 class="mode-title">▶ FUN MODE</h3>
+            <div class="description-text">
+                <ul>
+                    <li>Player order is randomized using the <strong>SHUFFLE ORDER</strong> button.</li>
+                    <li>Players 1 through 4 each select <strong>1 Game Option</strong>.</li>
+                    <li><strong>Selection Order:</strong>
+                        <ul style="margin-top: 10px; margin-left: 20px;">
+                            <li><strong>Player 1:</strong> Chooses 1 from 4 options.</li>
+                            <li><strong>Player 2:</strong> Chooses 1 from remaining 3 options.</li>
+                            <li><strong>Player 3:</strong> Chooses 1 from remaining 2 options.</li>
+                            <li><strong>Player 4:</strong> Takes the last option.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Game Flow:</strong> Select Option 👉 Shoot 👉 Next Player Selects 👉 Shoot.</li>
+                    <li>After the first 4 players, subsequent players proceed with <strong>Medium Speed</strong>
+                        settings fixed.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">⚙️ 3. GAME OPTIONS (FUN MODE Only)</h2>
+
+            <div class="option-box">
+                <div class="option-header">Option 1️⃣ : Target Enlarge</div>
+                <div class="description-text">
+                    <ul>
+                        <li>Target stops rotating.</li>
+                        <li>Select a target to <strong>expand its size by 1.5x</strong>.</li>
+                        <li>Expanded size persists until the next player's turn.</li>
+                        <li>Target/Arrow Speed sliders are locked to <strong>Medium</strong>.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="option-box">
+                <div class="option-header">Option 2️⃣ : Target Reduce</div>
+                <div class="description-text">
+                    <ul>
+                        <li>Target stops rotating.</li>
+                        <li>Select a target to <strong>shrink its size by half (0.5x)</strong>.</li>
+                        <li>Shrunk size persists until the next player's turn.</li>
+                        <li>Target/Arrow Speed sliders are locked to <strong>Medium</strong>.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="option-box">
+                <div class="option-header">Option 3️⃣ : Limited Target Speed</div>
+                <div class="description-text">
+                    <ul>
+                        <li><strong>TARGET SPEED:</strong> Restriction range 10% ~ 30%.</li>
+                        <li><strong>ARROW SPEED:</strong> Fixed at Medium.</li>
+                        <li>Applies only to the current player's turn.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="option-box">
+                <div class="option-header">Option 4️⃣ : Arrow Speed Control</div>
+                <div class="description-text">
+                    <ul>
+                        <li><strong>ARROW SPEED:</strong> Freely adjustable (Full Range).</li>
+                        <li><strong>TARGET SPEED:</strong> Fixed at Medium.</li>
+                        <li>Applies only to the current player's turn.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">🎯 GAME FEATURES</h2>
+            <div class="description-text">
+                <ul>
+                    <li>Combination of <strong>Skill-based</strong> + <strong>Random Elements</strong>.</li>
+                    <li>Exciting turn-based progression.</li>
+                    <li>Versatile for parties, practice, or random selection.</li>
+                    <li>Easy to play on both **Mobile and PC**.</li>
+                </ul>
+            </div>
+        </section>
+
+        <br><br>
+        <div style="text-align: center; opacity: 0.5; font-size: 0.8rem;">
+            &copy; 2026 Chicken Target Game. All rights reserved.
+        </div>
+    </div>
+</body>
+
+</html>
