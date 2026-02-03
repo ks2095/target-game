@@ -16,11 +16,12 @@
 <body>
     <div id="game-wrapper">
         <div id="ui-layer">
+            <!-- Aspect Ratio Toggle removed -->
             <header>
                 <div class="header-left">
                     <h1 class="glow-text">TARGET GAME</h1>
                 </div>
-                <div id="instruction">Click and hold for 2 seconds.</div>
+
                 <div id="count-display" class="hidden"></div>
 
                 <div id="setup-panel" class="glass-panel">
@@ -112,19 +113,31 @@
                 <h2 class="option-title">SELECT OPTION</h2>
                 <div class="option-grid">
                     <div class="option-card" data-option="1">
-                        <div class="option-icon">1</div>
-                        <div class="option-label">Expand Target Area by 150%</div>
+                        <div class="option-icon" style="padding: 0; overflow: hidden; transform: scale(2);"><img
+                                src="option_1_icon.png" alt="Option 1"
+                                style="width: 100%; height: 100%; object-fit: cover;"></div>
+                        <div class="option-label">Click Target Area<br>Expand <span
+                                style="color: var(--primary-glow);">150%</span></div>
                     </div>
                     <div class="option-card" data-option="2">
-                        <div class="option-icon">2</div>
-                        <div class="option-label">Shrink Target Area by 50%</div>
+                        <div class="option-icon"
+                            style="padding: 0; overflow: hidden; transform: scale(2); background-color: black;"><img
+                                src="option_2_icon.png" alt="Option 2"
+                                style="width: 100%; height: 100%; object-fit: cover;"></div>
+                        <div class="option-label">Click Target Area<br>Shrink <span
+                                style="color: var(--primary-glow);">50%</span></div>
                     </div>
                     <div class="option-card" data-option="3">
-                        <div class="option-icon">3</div>
+                        <div class="option-icon"
+                            style="padding: 0; overflow: hidden; transform: scale(2); background-color: black;"><img
+                                src="option_3_icon.png" alt="Option 3"
+                                style="width: 100%; height: 100%; object-fit: cover;"></div>
                         <div class="option-label">Adjust Target Rotation Speed</div>
                     </div>
                     <div class="option-card" data-option="4">
-                        <div class="option-icon">4</div>
+                        <div class="option-icon" style="padding: 0; overflow: hidden; transform: scale(2);"><img
+                                src="option_4_icon.png" alt="Option 4"
+                                style="width: 100%; height: 100%; object-fit: cover;"></div>
                         <div class="option-label">Adjust Arrow Speed</div>
                     </div>
                 </div>
