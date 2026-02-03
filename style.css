@@ -55,33 +55,6 @@ body {
     color: black;
     transform: translateX(-5px);
     box-shadow: 0 0 15px var(--primary-glow);
-    box-shadow: 0 0 15px var(--primary-glow);
-}
-
-.ratio-btn {
-    position: absolute;
-    bottom: 1.5rem;
-    left: 1.5rem;
-    /* Adjusted to bottom left */
-    z-index: 1000;
-    padding: 0.5rem 0.8rem;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 8px;
-    color: white;
-    font-size: 0.8rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    pointer-events: auto;
-}
-
-.ratio-btn:hover,
-.ratio-btn.active {
-    background: var(--secondary-glow);
-    color: black;
-    box-shadow: 0 0 10px var(--secondary-glow);
 }
 
 #game-wrapper {
@@ -91,16 +64,6 @@ body {
     background: radial-gradient(circle at center, #151520 0%, #0a0a0f 100%);
     overflow: hidden;
     box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
-    transition: all 0.5s ease;
-}
-
-#game-wrapper.ratio-20-9 {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 20 / 9;
-    max-height: 100vh;
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
 }
 
 #ui-layer {
@@ -239,29 +202,27 @@ header {
 
 /* Setup Panel Styles - Moved to Bottom Center */
 .glass-panel {
-    background: transparent;
+    background: var(--bg-dark);
+    /* Slightly darker for better visibility */
     border: none;
-    backdrop-filter: none;
+    backdrop-filter: blur(20px);
+    border-radius: 24px 24px 0 0;
+    /* More rounded top */
     padding: 1.2rem 1.5rem;
-    pointer-events: none;
-    /* Allow clicks to pass through empty areas */
+    pointer-events: auto;
     width: 90%;
     max-width: 800px;
     position: absolute;
     bottom: 30px;
+    /* Moved up */
     left: 54%;
+    /* Moved right further */
     transform: translateX(-50%);
     max-height: 40vh;
-    overflow-y: visible;
-    /* changed from auto to avoid scrollbar box if possible, or keep auto if content overflows */
-    box-shadow: none;
+    overflow-y: auto;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
     z-index: 100;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Ensure interactive elements inside the panel are still clickable */
-.glass-panel * {
-    pointer-events: auto;
 }
 
 .glass-panel.expanded {
@@ -1152,12 +1113,4 @@ input[type="range"]::-webkit-slider-thumb:hover {
         bottom: 30px;
         right: 30px;
     }
-}
-
-/* 20:9 Mode Adjustments */
-#game-wrapper.ratio-20-9 #fire-control-area {
-    bottom: 110px;
-    /* Moved down (original 140px) */
-    right: 80px;
-    /* Moved left (original 40px) */
 }

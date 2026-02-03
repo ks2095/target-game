@@ -9,7 +9,6 @@ const resultShooter = document.getElementById('result-shooter');
 const uiLayer = document.getElementById('ui-layer');
 const fireBtn = document.getElementById('fire-btn'); // New Fire Button
 const retryBtn = document.getElementById('retry-btn');
-const ratioToggleBtn = document.getElementById('ratio-toggle-btn');
 const arrowSpeedMultiplierInput = document.getElementById('arrow-speed-multiplier');
 const winLabel = document.querySelector('.win-label');
 const betPlayerInputsContainer = document.getElementById('bet-player-inputs');
@@ -164,15 +163,6 @@ rotationSpeedInput.addEventListener('input', () => {
         // Map 1-20 slider value to 0.01 - 0.20 range
         target.rotationSpeed = parseFloat(rotationSpeedInput.value) / 100;
     }
-});
-
-ratioToggleBtn.addEventListener('click', () => {
-    const gameWrapper = document.getElementById('game-wrapper');
-    gameWrapper.classList.toggle('ratio-20-9');
-    ratioToggleBtn.classList.toggle('active');
-
-    // Trigger resize to adjust canvas
-    resize();
 });
 
 let isPulling = false;
