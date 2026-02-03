@@ -239,26 +239,29 @@ header {
 
 /* Setup Panel Styles - Moved to Bottom Center */
 .glass-panel {
-    background: var(--bg-dark);
+    background: transparent;
     border: none;
-    backdrop-filter: blur(20px);
-    border-radius: 24px 24px 0 0;
-    /* More rounded top */
+    backdrop-filter: none;
     padding: 1.2rem 1.5rem;
-    pointer-events: auto;
+    pointer-events: none;
+    /* Allow clicks to pass through empty areas */
     width: 90%;
     max-width: 800px;
     position: absolute;
     bottom: 30px;
-    /* Moved up */
     left: 54%;
-    /* Moved right further */
     transform: translateX(-50%);
     max-height: 40vh;
-    overflow-y: auto;
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
+    overflow-y: visible;
+    /* changed from auto to avoid scrollbar box if possible, or keep auto if content overflows */
+    box-shadow: none;
     z-index: 100;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ensure interactive elements inside the panel are still clickable */
+.glass-panel * {
+    pointer-events: auto;
 }
 
 .glass-panel.expanded {
