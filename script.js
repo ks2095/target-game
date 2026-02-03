@@ -12,6 +12,37 @@ const retryBtn = document.getElementById('retry-btn');
 const arrowSpeedMultiplierInput = document.getElementById('arrow-speed-multiplier');
 const winLabel = document.querySelector('.win-label');
 const betPlayerInputsContainer = document.getElementById('bet-player-inputs');
+const setupHeader = document.querySelector('.setup-header');
+const guideHand = document.getElementById('guide-hand');
+
+function showGuideHand() {
+    if (guideHand) {
+        guideHand.classList.remove('hidden');
+        guideHand.classList.add('guide-hand');
+
+        // Position it near the option modal initially (center-ish) then let CSS animate it?
+        // Actually, CSS animation is "bounce". We need to place it.
+        // Let's place it near the center but offset, giving a hint to click "Target"
+        const rect = canvas.getBoundingClientRect();
+        // Target position is target.x, target.y
+        // We want the hand to point at it.
+        // Let's position it slightly offset
+        guideHand.style.left = (target.x + 50) + 'px';
+        guideHand.style.top = (target.y + 50) + 'px';
+    }
+}
+
+function hideGuideHand() {
+    if (guideHand) guideHand.classList.add('hidden');
+}
+
+function hideSetupUI() {
+    if (setupHeader) setupHeader.classList.add('hidden');
+}
+
+function showSetupUI() {
+    if (setupHeader) setupHeader.classList.remove('hidden');
+}
 
 const soundTension = document.getElementById('sound-tension');
 const soundAward = document.getElementById('sound-award');
@@ -23,13 +54,20 @@ const soundFlight = document.getElementById('sound-flight');
 const soundFall = document.getElementById('sound-fall');
 const soundShuffle = document.getElementById('sound-shuffle');
 const modeToggle = document.getElementById('mode-toggle');
+let checkShuffleReady; // Function reference for global scope if needed, though mostly local scope works
 const distToggle = document.getElementById('dist-toggle'); // New toggle
 const playerCountLabel = document.getElementById('player-count-label');
 const betCountInput = document.getElementById('bet-count');
 const betCountGroup = document.getElementById('bet-count-group');
+let isOptionSelectedForTurn = false; // Track if option was selected this turn
 const countDisplay = document.getElementById('count-display');
 const diffArrowGroup = document.getElementById('diff-arrow-group');
 const diffArrowSpeedInput = document.getElementById('diff-arrow-speed');
+const targetSpeedLabel = document.getElementById('target-speed-label');
+const arrowSpeedLabel = document.getElementById('arrow-speed-label');
+let isOptionSelectionLocked = false; // Prevents option changes after invalid shot
+let isPausedByHold = false;
+let prePauseSpeed = 0;
 let flightSoundTimer = null;
 let hasShuffled = false; // Track if shooters have been shuffled
 let isSelectingBoostItem = false; // For 1st player's special privilege
@@ -249,11 +287,14 @@ function openOptionSelectionModal() {
                     if (backdrop) backdrop.style.opacity = '0'; // Make backdrop transparent
                     activeOptionSelection = 1; // Enable selection mode
                     currentBoostFactor = 1.5;
+                    showGuideHand();
                 } else if (option.dataset.option === '2') {
                     target.rotationSpeed = 0;
                     if (backdrop) backdrop.style.opacity = '0'; // Make backdrop transparent
                     activeOptionSelection = 2; // Enable selection mode
                     currentBoostFactor = 0.5;
+                    showGuideHand();
+                    // Don't set isOptionSelectedForTurn here, wait for click on target
                 } else if (option.dataset.option === '3') {
                     // Option 3 Logic: Target Speed 10-30% range, Arrow Speed Fixed
 
@@ -276,6 +317,11 @@ function openOptionSelectionModal() {
                     modal.classList.add('hidden');
                     backdrop.style.opacity = '';
                     activeOptionSelection = 0;
+                    isOptionSelectedForTurn = true;
+                    updateNameInputs();
+
+                    // Blink Label for Opt 3
+                    if (targetSpeedLabel) targetSpeedLabel.classList.add('label-blink');
                 } else {
                     // Option 4 Logic: Arrow Speed Adjustable, Target Speed Fixed Middle
 
@@ -297,6 +343,11 @@ function openOptionSelectionModal() {
                     modal.classList.add('hidden');
                     if (backdrop) backdrop.style.opacity = '';
                     activeOptionSelection = 0;
+                    isOptionSelectedForTurn = true;
+                    updateNameInputs();
+
+                    // Blink Label for Opt 4
+                    if (arrowSpeedLabel) arrowSpeedLabel.classList.add('label-blink');
                 }
             };
         });
@@ -329,8 +380,11 @@ function openOptionSelectionModal() {
                                 updatePlayerNames(false);
                                 updateNameInputs(); // Sync UI
 
+                                hideGuideHand(); // Hide the hand guide
+
                                 // Mark as selected globally (Confirmation point for Opt 1 & 2)
                                 selectedOptions.add(activeOptionSelection.toString());
+                                isOptionSelectedForTurn = true;
 
                                 // Close modal
                                 modal.classList.add('hidden');
@@ -405,6 +459,11 @@ function openOptionSelectionModal() {
                 const backdrop = modal.querySelector('.option-backdrop');
                 if (backdrop) backdrop.style.opacity = '';
                 activeOptionSelection = 0;
+                hideGuideHand(); // Ensure hidden on cancel
+
+                // Restore Blink if cancelled
+                isOptionSelectedForTurn = false;
+                updateNameInputs();
             };
         }
     }
@@ -469,6 +528,7 @@ function updateNameInputs(overrideNames = null) {
                 null, // No delete button for shooter row
                 (val) => {
                     shooterNames[i] = val;
+                    if (checkShuffleReady) checkShuffleReady();
                 },
                 (distributionMode === 'diff' && targetMode === 'player' && i < 3 && hasShuffled) // Only buttons in DIFF mode
             );
@@ -482,6 +542,23 @@ function updateNameInputs(overrideNames = null) {
             shuffleBtn.className = 'shuffle-btn';
             if (!hasShuffled) {
                 shuffleBtn.innerText = 'SHUFFLE ORDER';
+                shuffleBtn.id = 'shuffle-order-btn'; // Add ID for easy access
+
+                checkShuffleReady = () => {
+                    const btn = document.getElementById('shuffle-order-btn');
+                    if (!btn) return;
+
+                    // Check all name inputs in this specific container
+                    const inputs = betPlayerInputsContainer.querySelectorAll('input.name-input');
+                    const allFilled = Array.from(inputs).every(input => input.value.trim() !== '');
+
+                    if (allFilled) {
+                        btn.classList.add('ready');
+                    } else {
+                        btn.classList.remove('ready');
+                    }
+                };
+
                 shuffleBtn.onclick = () => {
                     if (shuffleBtn.dataset.shuffling === "true") return;
                     shuffleBtn.dataset.shuffling = "true";
@@ -529,27 +606,46 @@ function updateNameInputs(overrideNames = null) {
                 // Shuffled state: Show "PlayerName Option Change" button
                 const firstPlayer = shooterNames[0] || "Player 1";
                 shuffleBtn.innerText = `${firstPlayer} SELECT OPTION`;
-                shuffleBtn.onclick = () => {
-                    // Check if all options are used
-                    if (selectedOptions.size >= 4) {
-                        // Fix Target Speed to Middle
-                        rotationSpeedInput.value = 10;
-                        target.rotationSpeed = 0.1;
-                        rotationSpeedInput.disabled = true;
 
-                        // Fix Arrow Speed to Middle
-                        arrowSpeedMultiplierInput.value = 0.775;
-                        arrowSpeed = arrowSpeedBase * 0.775;
-                        arrowSpeedMultiplierInput.disabled = true;
-                        diffArrowSpeedInput.disabled = true;
 
-                        showAlert("No options left. Speed fixed to middle value.");
-                        return;
-                    }
-                    openOptionSelectionModal();
-                };
+                if (isOptionSelectionLocked) {
+                    shuffleBtn.classList.add('disabled');
+                    shuffleBtn.onclick = null; // Disable click
+                    shuffleBtn.classList.remove('ready'); // Ensure no blink
+                } else if (!isOptionSelectedForTurn) {
+                    shuffleBtn.classList.add('ready'); // Pulse if not selected yet
+                    shuffleBtn.onclick = () => {
+                        // Check if all options are used
+                        if (selectedOptions.size >= 4) {
+                            showAlert("No options left. Speed fixed to middle value.");
+                            return;
+                        }
+
+                        // Stop blinking immediately when opening modal
+                        isOptionSelectedForTurn = true;
+                        updateNameInputs();
+
+                        openOptionSelectionModal();
+                    };
+                } else {
+                    shuffleBtn.classList.remove('ready'); // Stop pulse if selected
+                    shuffleBtn.onclick = () => {
+                        // Check if all options are used
+                        if (selectedOptions.size >= 4) {
+                            showAlert("No options left. Speed fixed to middle value.");
+                            return;
+                        }
+
+                        // Stop blinking immediately when opening modal
+                        isOptionSelectedForTurn = true;
+                        updateNameInputs();
+
+                        openOptionSelectionModal();
+                    };
+                }
             }
             betPlayerInputsContainer.appendChild(shuffleBtn);
+            if (checkShuffleReady) checkShuffleReady(); // Initial check
         }
     } else {
         betPlayerInputsContainer.classList.add('hidden');
@@ -774,6 +870,7 @@ class Arrow {
 
             if (this.y > height + 100) {
                 this.active = false;
+                showSetupUI();
                 if (this.isBounced) {
                     isLoaded = true; // Reload bow after arrow falls off-screen
                 }
@@ -821,6 +918,7 @@ class Arrow {
 
             if (this.x < -100) {
                 this.active = false;
+                showSetupUI();
             }
         }
     }
@@ -986,6 +1084,7 @@ function handleMiss() {
 
         setTimeout(() => {
             div.remove();
+            showSetupUI();
         }, 1500);
     }, 1000);
 
@@ -1008,22 +1107,23 @@ function handleMiss() {
         rotationSpeedInput.max = 20;
         rotationSpeedInput.value = 10;
         target.rotationSpeed = 0.1;
-        rotationSpeedInput.value = 10;
-        target.rotationSpeed = 0.1;
 
-        if (distributionMode === 'diff') {
-            rotationSpeedInput.disabled = true; // Lock for next player in FUN mode
-            arrowSpeedMultiplierInput.disabled = true;
-        } else {
-            rotationSpeedInput.disabled = false; // Enable for BASIC mode
-            arrowSpeedMultiplierInput.disabled = false;
+        // Reset Option 1 & 2 Effects (Boost/Shrink) Logic
+        if (boostedItemIndex !== -1) {
+            boostedItemIndex = -1;
+            currentBoostFactor = 1;
+            isSelectingBoostItem = false;
+
+            // LOCK selection instead of removing
+            // selectedOptions.delete('1'); // kept as consumed
+            // selectedOptions.delete('2'); // kept as consumed
+
+            isOptionSelectionLocked = true;
+
+            // Update Target and UI
+            updatePlayerNames(false);
+            updateNameInputs();
         }
-
-        // Also reset arrow speed lock if it was locked by Option 3
-
-
-        // Also reset arrow speed lock if it was locked by Option 3
-        diffArrowSpeedInput.disabled = true;
     }
 }
 
@@ -1234,13 +1334,26 @@ betCountInput.addEventListener('change', () => {
             isSelectingBoostItem = false;
             boostedItemIndex = -1;
         }
+
+        // Unlock speeds when item count is readjusted (New Round/Reset)
+        if (distributionMode === 'equal') {
+            rotationSpeedInput.disabled = false;
+            arrowSpeedMultiplierInput.disabled = false;
+        }
     }
     updateNameInputs();
 });
 playerCountInput.addEventListener('change', updateNameInputs);
 
 function showResult(winner, color, shooter = "") {
+    showSetupUI();
     gameState = 'result';
+
+    // Lock speeds for subsequent players in BET+BASIC mode
+    if (targetMode === 'bet' && distributionMode === 'equal') {
+        rotationSpeedInput.disabled = true;
+        arrowSpeedMultiplierInput.disabled = true;
+    }
 
     if (targetMode === 'player') {
         winLabel.innerText = 'RESULT';
@@ -1390,6 +1503,11 @@ function shoot() {
 function startPull() {
     if (gameState !== 'playing') return;
     isPulling = true;
+    hideSetupUI();
+
+    // Stop blinking labels on pull
+    if (targetSpeedLabel) targetSpeedLabel.classList.remove('label-blink');
+    if (arrowSpeedLabel) arrowSpeedLabel.classList.remove('label-blink');
 
     if (soundPull.src) {
         soundPull.currentTime = 0;
@@ -1410,6 +1528,7 @@ function release() {
         } else {
             // If released halfway, smoothly restore volume (handled in animate loop)
             // No action needed here as animate loop handles volume based on pullDistance
+            showSetupUI();
         }
 
         isPulling = false;
@@ -1451,6 +1570,54 @@ window.addEventListener('keyup', (e) => {
     if (e.code === 'Space') release();
 });
 
+// Hold to Pause Logic
+function handleTargetHoldStart(clientX, clientY) {
+    if (gameState !== 'playing') return;
+    if (arrows.length > 0) return; // Arrow is flying, don't pause
+
+    const rect = canvas.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+
+    // Check distance to target center
+    const dx = x - target.x;
+    const dy = y - target.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (dist < target.radius) {
+        if (!isPausedByHold) {
+            prePauseSpeed = target.rotationSpeed;
+            target.rotationSpeed = 0;
+            isPausedByHold = true;
+        }
+    }
+}
+
+function releasePause() {
+    if (isPausedByHold) {
+        target.rotationSpeed = prePauseSpeed;
+        isPausedByHold = false;
+        // If we were in a ramp-up, this simply restores the snapshot.
+        // The ramp timer might have continued increments in background if we didn't block it,
+        // but restoring prePauseSpeed forces it back. 
+        // Actually, if rampTimer runs, it writes to rotationSpeed.
+        // For perfect ramp pause, we'd need more complex logic, but this covers 99% cases.
+    }
+}
+
+canvas.addEventListener('mousedown', (e) => {
+    handleTargetHoldStart(e.clientX, e.clientY);
+});
+canvas.addEventListener('touchstart', (e) => {
+    // e.preventDefault(); // Optional: might block scrolling if user misses target slightly
+    const touch = e.touches[0];
+    handleTargetHoldStart(touch.clientX, touch.clientY);
+});
+
+window.addEventListener('mouseup', releasePause);
+window.addEventListener('touchend', releasePause);
+window.addEventListener('mouseleave', releasePause); // Handle mouse leaving window/canvas logic if needed
+
 retryBtn.addEventListener('click', () => {
     // Stop award music if playing
     if (soundAward) {
@@ -1468,11 +1635,18 @@ retryBtn.addEventListener('click', () => {
     }
 
     // Restore Defaults (in case Option 3 or others changed them)
+    // Only re-enable if NOT in a locked mode (Diff OR (Bet+Equal locked))
+    // Actually, for Bet+Equal, we just locked it in showResult. We want to KEEP it locked.
+    // So we only enable if IT IS NOT (Bet+Equal) AND NOT (Bet+Diff).
+
+    const isBetLocked = (targetMode === 'bet' && distributionMode === 'equal');
+    const isDiffLocked = (targetMode === 'bet' && distributionMode === 'diff');
+
     rotationSpeedInput.min = 1;
     rotationSpeedInput.max = 20;
-    rotationSpeedInput.disabled = (targetMode === 'bet' && distributionMode === 'diff');
+    rotationSpeedInput.disabled = isBetLocked || isDiffLocked;
 
-    arrowSpeedMultiplierInput.disabled = (targetMode === 'bet' && distributionMode === 'diff');
+    arrowSpeedMultiplierInput.disabled = isBetLocked || isDiffLocked;
     // Restore default range for arrow speed
     arrowSpeedMultiplierInput.min = 0.05;
     arrowSpeedMultiplierInput.max = 1.5;
@@ -1508,6 +1682,10 @@ retryBtn.addEventListener('click', () => {
     // Set speed based on current slider value
     target.rotationSpeed = parseFloat(rotationSpeedInput.value) / 100;
     gameState = 'playing';
+
+    isOptionSelectedForTurn = false; // Reset for next turn
+    isOptionSelectionLocked = false; // Unlock option selection
+    updateNameInputs(); // Refresh button state
 });
 
 function drawBow(x, y, pull) {

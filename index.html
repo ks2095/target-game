@@ -63,7 +63,7 @@
                                 </div>
                             </div>
                             <div class="input-group">
-                                <label>TARGET SPEED:</label>
+                                <label id="target-speed-label">TARGET SPEED:</label>
                                 <input type="range" id="rotation-speed" min="1" max="20" value="8">
                             </div>
                             <div class="input-group" id="diff-arrow-group" style="display: none;">
@@ -71,7 +71,7 @@
                                 <input type="range" id="diff-arrow-speed" min="1" max="6" step="0.1" value="3" disabled>
                             </div>
                             <div class="input-group">
-                                <label>ARROW SPEED:</label>
+                                <label id="arrow-speed-label">ARROW SPEED:</label>
                                 <input type="range" id="arrow-speed-multiplier" min="0.05" max="1.5" step="0.01"
                                     value="1.0">
                             </div>
@@ -89,7 +89,7 @@
 
         <div id="fire-control-area">
             <div id="fire-btn">
-                <span class="fire-text">PULL</span>
+                <span class="fire-text">PUSH 2S</span>
                 <span class="fire-arrow">⮕</span>
             </div>
             <p class="fire-hint">Hold to Charge</p>
@@ -144,6 +144,7 @@
                 <button id="option-close-btn">CANCEL</button>
             </div>
         </div>
+        <div id="guide-hand" class="hidden">👆</div>
     </div>
 
     <!-- Custom Alert Modal -->
