@@ -68,6 +68,9 @@ const arrowSpeedLabel = document.getElementById('arrow-speed-label');
 let isOptionSelectionLocked = false; // Prevents option changes after invalid shot
 let isPausedByHold = false;
 let prePauseSpeed = 0;
+// Variables for locking speed to first player's setting
+let lockedRotationValue = 10;
+let lockedArrowMultiplier = 0.775;
 let flightSoundTimer = null;
 let hasShuffled = false; // Track if shooters have been shuffled
 let isSelectingBoostItem = false; // For 1st player's special privilege
@@ -1351,6 +1354,13 @@ function showResult(winner, color, shooter = "") {
 
     // Lock speeds for subsequent players in BET+BASIC mode
     if (targetMode === 'bet' && distributionMode === 'equal') {
+        // If not already disabled, this is the first player finishing.
+        // Capture their speed settings to enforce on subsequent players.
+        if (!rotationSpeedInput.disabled) {
+            lockedRotationValue = rotationSpeedInput.value;
+            lockedArrowMultiplier = arrowSpeedMultiplierInput.value;
+        }
+
         rotationSpeedInput.disabled = true;
         arrowSpeedMultiplierInput.disabled = true;
     }
@@ -1658,11 +1668,21 @@ retryBtn.addEventListener('click', () => {
         activeOptionSelection = 0;
     }
 
-    // Explicitly reset speeds to middle on retry (next player/round)
-    rotationSpeedInput.value = 10;
-    target.rotationSpeed = 0.1;
-    arrowSpeedMultiplierInput.value = 0.775;
-    arrowSpeed = arrowSpeedBase * 0.775;
+    // Explicitly set/reset speeds
+    if (isBetLocked) {
+        // Enforce the locked speeds (First Player's choice)
+        rotationSpeedInput.value = lockedRotationValue;
+        target.rotationSpeed = parseFloat(lockedRotationValue) / 100;
+
+        arrowSpeedMultiplierInput.value = lockedArrowMultiplier;
+        arrowSpeed = arrowSpeedBase * parseFloat(lockedArrowMultiplier);
+    } else {
+        // Normal reset to middle
+        rotationSpeedInput.value = 10;
+        target.rotationSpeed = 0.1;
+        arrowSpeedMultiplierInput.value = 0.775;
+        arrowSpeed = arrowSpeedBase * 0.775;
+    }
 
     arrows.length = 0;
     isLoaded = true; // Reload arrow on retry
