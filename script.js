@@ -115,7 +115,7 @@ function showConfirm(message, onConfirm, onCancel) {
     showAlert(message, onConfirm, true, onCancel);
 }
 
-const colors = ['#00ff88', '#00ccff', '#ff3e3e', '#ffcc00', '#ff00ff', '#ffffff'];
+const colors = ['#00ff88', '#00ccff', '#ff3e3e', '#ffcc00', '#ff00ff', '#ffffff', '#4444ff', '#ffa500'];
 
 const SEGMENT_RATIO_SETS_3 = [
     [45, 33, 22],
@@ -896,8 +896,21 @@ class Arrow {
 
                 if (willStick) {
                     this.hit = true;
+                    // Keep visual angle based on center collision for "sticking" position
                     this.attachedAngle = Math.atan2(dy, dx) - target.rotation;
-                    handleHit(this.attachedAngle);
+
+                    // [NEW] Calculate Hit Angle based on Green Dot Tip (-123, -4)
+                    // Arrow rotation is effectively 0 when flying (drawing adds PI/2). 
+                    // So we use simple offset.
+                    // Tip World Position:
+                    const tipX = this.x - 123;
+                    const tipY = this.y - 4;
+
+                    // Calculate angle of Tip relative to Target Center
+                    const tipAngle = Math.atan2(tipY - target.y, tipX - target.x) - target.rotation;
+
+                    // Pass TIP angle for scoring
+                    handleHit(tipAngle);
                 } else {
                     // --- Added Pause Logic ---
                     target.rotationSpeed = 0;
@@ -947,24 +960,16 @@ class Arrow {
 
             ctx.drawImage(chickenImgProcessed, -drawWidth * 0.5, -drawHeight * 0.5, drawWidth, drawHeight);
 
-            // Draw Small Black X at the hit point (mouth/pivot) - Drawn AFTER image to be on top
-            if (this.hit) {
-                ctx.save();
-                ctx.shadowBlur = 0; // No glow for crisp X
-                ctx.strokeStyle = 'black';
-                ctx.lineWidth = 3;
 
-                const size = 6; // Half-size (total size 12)
-                ctx.beginPath();
-                // Draw X
-                ctx.moveTo(-size, -size);
-                ctx.lineTo(size, size);
-                ctx.moveTo(size, -size);
-                ctx.lineTo(-size, size);
-                ctx.stroke();
 
-                ctx.restore();
-            }
+            // [NEW] Draw Red Dot at the tip (pivot point 0,0) - Moved 123px left, 4px up
+            ctx.save();
+            ctx.fillStyle = 'red';
+            ctx.beginPath();
+            ctx.arc(-123, -4, 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
         } else {
             // Basic fallback if image not loaded yet
             ctx.strokeStyle = 'white';
@@ -973,6 +978,12 @@ class Arrow {
             ctx.moveTo(0, 0);
             ctx.lineTo(0, 40);
             ctx.stroke();
+
+            // [NEW] Draw Red Dot at fallback tip too
+            ctx.fillStyle = 'red';
+            ctx.beginPath();
+            ctx.arc(-123, -4, 3, 0, Math.PI * 2);
+            ctx.fill();
         }
 
         ctx.restore();
@@ -1792,6 +1803,12 @@ function animate() {
             ctx.rotate(Math.PI / 2);
 
             ctx.drawImage(chickenImgProcessed, -drawWidth * 0.5, -drawHeight * 0.5, drawWidth, drawHeight);
+
+            // [NEW] Draw Red Dot at the tip (pivot point 0,0)
+            ctx.fillStyle = 'red';
+            ctx.beginPath();
+            ctx.arc(-123, -4, 3, 0, Math.PI * 2);
+            ctx.fill();
 
             ctx.restore();
         }
