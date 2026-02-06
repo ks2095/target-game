@@ -17,14 +17,6 @@ if (ratioToggleBtn) {
     ratioToggleBtn.addEventListener('click', () => {
         document.body.classList.toggle('ratio-20-9');
         ratioToggleBtn.classList.toggle('active');
-        // Update button text for feedback
-        if (document.body.classList.contains('ratio-20-9')) {
-            ratioToggleBtn.style.color = 'black';
-            ratioToggleBtn.style.background = 'var(--secondary-glow)';
-        } else {
-            ratioToggleBtn.style.color = '';
-            ratioToggleBtn.style.background = '';
-        }
     });
 }
 
