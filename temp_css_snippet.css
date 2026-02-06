@@ -1,0 +1,37 @@
+/* 20:9 Ratio Toggle Button */
+#ratio-toggle-btn {
+    position: absolute;
+    bottom: 15rem;
+    /* Positioned below target area */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2000;
+    pointer-events: auto;
+    padding: 0.4rem 0.8rem;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    color: var(--secondary-glow);
+    font-family: var(--font-main);
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+#ratio-toggle-btn:hover,
+#ratio-toggle-btn.active {
+    background: var(--secondary-glow);
+    color: black;
+    box-shadow: 0 0 15px rgba(0, 204, 255, 0.4);
+    border-color: var(--secondary-glow);
+}
+
+/* Adjustments for 20:9 Mobile View */
+body.ratio-20-9 .glass-panel {
+    bottom: 120px !important;
+    /* Forces panel up to clear browser bar */
+    border-radius: 24px;
+    /* Full rounded corners since it's floating */
+}

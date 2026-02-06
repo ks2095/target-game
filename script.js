@@ -9,6 +9,32 @@ const resultShooter = document.getElementById('result-shooter');
 const uiLayer = document.getElementById('ui-layer');
 const fireBtn = document.getElementById('fire-btn'); // New Fire Button
 const retryBtn = document.getElementById('retry-btn');
+const resetBtn = document.getElementById('game-reset-btn'); // New Reset Button
+const ratioToggleBtn = document.getElementById('ratio-toggle-btn'); // New Ratio Toggle Button
+
+// Ratio Toggle Logic
+if (ratioToggleBtn) {
+    ratioToggleBtn.addEventListener('click', () => {
+        document.body.classList.toggle('ratio-20-9');
+        ratioToggleBtn.classList.toggle('active');
+        // Update button text for feedback
+        if (document.body.classList.contains('ratio-20-9')) {
+            ratioToggleBtn.style.color = 'black';
+            ratioToggleBtn.style.background = 'var(--secondary-glow)';
+        } else {
+            ratioToggleBtn.style.color = '';
+            ratioToggleBtn.style.background = '';
+        }
+    });
+}
+
+// Reset Button Logic
+if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+        window.location.reload();
+    });
+}
+
 const arrowSpeedMultiplierInput = document.getElementById('arrow-speed-multiplier');
 const winLabel = document.querySelector('.win-label');
 const betPlayerInputsContainer = document.getElementById('bet-player-inputs');
@@ -970,6 +996,17 @@ class Arrow {
             ctx.fill();
             ctx.restore();
 
+            // [NEW] Label for First Player in BET Mode (Basic & Fun)
+            if (targetMode === 'bet') {
+                ctx.fillStyle = 'black';
+                ctx.font = '18px "Gamja Flower", cursive';
+                ctx.textAlign = 'left';
+                const label = (shooterNames && shooterNames[0]) ? shooterNames[0] : "Player 1";
+                ctx.fillText(label, 10, -2);
+            }
+
+            ctx.restore();
+
         } else {
             // Basic fallback if image not loaded yet
             ctx.strokeStyle = 'white';
@@ -1809,6 +1846,15 @@ function animate() {
             ctx.beginPath();
             ctx.arc(-123, -4, 3, 0, Math.PI * 2);
             ctx.fill();
+
+            // [NEW] Label for First Player in BET Mode (Basic & Fun)
+            if (targetMode === 'bet') {
+                ctx.fillStyle = 'black';
+                ctx.font = '18px "Gamja Flower", cursive';
+                ctx.textAlign = 'left';
+                const label = (shooterNames && shooterNames[0]) ? shooterNames[0] : "Player 1";
+                ctx.fillText(label, 10, -2);
+            }
 
             ctx.restore();
         }
